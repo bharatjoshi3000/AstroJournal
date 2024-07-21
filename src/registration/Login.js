@@ -12,7 +12,8 @@ import {
   Keyboard,
 } from 'react-native';
 import Animated, {FadeInDown, FadeInUp} from 'react-native-reanimated';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import { isUserLoggedIn } from '../../redux/actions/action';
 
 export const deviceWidth = Dimensions.get('window').width;
 
@@ -20,8 +21,12 @@ const Login = props => {
   const {navigation} = props || {};
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const existUser = useSelector(state => state.userReducer.users);
+
+  const existUser = useSelector(state => state.user.users);
+  const isLogin = useSelector(state => state.user.isLoggedIn);
+  console.log(isLogin,'isLoggedIn') 
   const [existingUsers, setExistingUsers] = useState(existUser);
+  const dispatch = useDispatch()
   useEffect(() => {
     setExistingUsers(existUser);
     console.log(existUser, 'existingUsers');
@@ -53,9 +58,10 @@ const Login = props => {
       return;
     }
 
-    const userExists = existingUsers.some(
+    const userExists = existingUsers?.some(
       user => user.email === email && user.password === password,
     );
+    dispatch(isUserLoggedIn(userExists));
     if (userExists) {
       Alert.alert('Login Successful', `Logged in with ${email}`);
       setTimeout(() => {
