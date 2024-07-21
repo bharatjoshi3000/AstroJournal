@@ -3,12 +3,11 @@ import {
   View,
   Text,
   TextInput,
-  Button,
-  StyleSheet,
   Alert,
   Dimensions,
   Image,
   TouchableOpacity,
+  StyleSheet,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import {createUser} from '../../redux/actions/action';
@@ -94,7 +93,7 @@ const Signup = props => {
       <View style={styles.fullHeightWidth}>
         <View style={styles.formContainer}>
           <Animated.View
-            entering={FadeInDown.delay(200).duration(1000).springify()}
+            entering={FadeInDown.duration(1000).springify()}
             style={styles.inputContainer}>
             <TextInput
               placeholderTextColor={'gray'}
@@ -106,7 +105,7 @@ const Signup = props => {
             />
           </Animated.View>
           <Animated.View
-            entering={FadeInDown.delay(400).duration(1000).springify()}
+            entering={FadeInDown.delay(200).duration(1000).springify()}
             style={styles.inputContainer}>
             <TextInput
               placeholderTextColor={'gray'}
@@ -119,7 +118,7 @@ const Signup = props => {
             />
           </Animated.View>
           <Animated.View
-            entering={FadeInDown.delay(600).duration(1000).springify()}
+            entering={FadeInDown.delay(400).duration(1000).springify()}
             style={[styles.inputContainer, styles.mb3]}>
             <TextInput
               placeholder="Password"
@@ -131,7 +130,7 @@ const Signup = props => {
             />
           </Animated.View>
           <Animated.View
-            entering={FadeInDown.delay(800).duration(1000).springify()}
+            entering={FadeInDown.delay(600).duration(1000).springify()}
             style={styles.fullWidth}>
             <TouchableOpacity
               style={styles.signupButton}
@@ -140,7 +139,7 @@ const Signup = props => {
             </TouchableOpacity>
           </Animated.View>
           <Animated.View
-            entering={FadeInDown.delay(1000).duration(1000).springify()}
+            entering={FadeInDown.delay(800).duration(1000).springify()}
             style={styles.row}>
             <Text>Already have an account?</Text>
             <TouchableOpacity onPress={() => navigation.navigate('Login')}>
@@ -212,7 +211,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   mb3: {
-    // marginBottom: 12,
+    marginBottom: 12,
   },
   fullWidth: {
     width: '100%',

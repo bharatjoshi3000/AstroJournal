@@ -9,13 +9,9 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  Keyboard,
 } from 'react-native';
-import Animated, {
-  FadeIn,
-  FadeInDown,
-  FadeInUp,
-  FadeOut,
-} from 'react-native-reanimated';
+import Animated, {FadeInDown, FadeInUp} from 'react-native-reanimated';
 import {useSelector} from 'react-redux';
 
 export const deviceWidth = Dimensions.get('window').width;
@@ -56,19 +52,35 @@ const Login = props => {
       );
       return;
     }
-    const indexOfUser = existingUsers.indexOf(item => {
-      return item.email === email;
-    });
 
-    if (indexOfUser !== -1) {
+    const userExists = existingUsers.some(
+      user => user.email === email && user.password === password,
+    );
+    if (userExists) {
       Alert.alert('Login Successful', `Logged in with ${email}`);
+      setTimeout(() => {
+        navigation.navigate('Home'); // Navigate to Home screen
+        // Clear the navigation stack
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Home'}],
+        });
+      }, 200);
     } else {
-      navigation.navigate('Signup');
+      Alert.alert(
+        'Access Denied!',
+        'Either the account is not registered or the password or email entered is incorrect',
+      );
     }
   };
 
   const handleSignUp = () => {
-    navigation.navigate('Signup');
+    Keyboard.dismiss();
+    setTimeout(() => {
+      navigation.navigate('Signup');
+      setEmail('');
+      setPassword('');
+    }, 200);
   };
 
   return (
