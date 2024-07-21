@@ -10,6 +10,7 @@ import {
   StyleSheet,
   Keyboard,
   Image,
+  Alert,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -20,8 +21,10 @@ import {
   searchTodo,
 } from '../../redux/actions/todoActions';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {isUserLoggedIn} from '../../redux/actions/action';
 
-const Home = () => {
+const Home = props => {
+  const {navigation} = props || {};
   const [newTodo, setNewTodo] = useState('');
   const [editing, setEditing] = useState(null);
   const [search, setSearch] = useState('');
@@ -53,6 +56,19 @@ const Home = () => {
   const handleSearch = text => {
     setSearch(text);
     dispatch(searchTodo(text));
+  };
+
+  const handleSignOutPress = () => {
+    Alert.alert('Logged Out !', `Logged out successfully!`);
+    dispatch(isUserLoggedIn(false));
+    setTimeout(() => {
+      navigation.navigate('Login'); // Navigate to Home screen
+      // Clear the navigation stack
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Login'}],
+      });
+    }, 200);
   };
 
   const filteredTodos = todos.filter(todo =>
@@ -95,6 +111,41 @@ const Home = () => {
   };
   return (
     <View style={styles.container}>
+      <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+        <Text
+          style={{
+            color: 'grey',
+            fontSize: 18,
+            lineHeight: 24,
+            fontWeight: 500,
+          }}>
+          Hey! What's in your mind ?
+        </Text>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={handleSignOutPress}
+          style={{
+            borderWidth: 1,
+            borderColor: 'red',
+            backgroundColor: '#ff9999',
+            width: 72,
+            height: 28,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 14,
+            marginLeft: 30,
+          }}>
+          <Text style={{lineHeight: 18, color: 'black'}}>Sign Out</Text>
+        </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          borderBottomWidth: 1,
+          borderBottomColor: '#f9f5fe',
+          marginBottom: 24,
+          marginTop: 20,
+        }}
+      />
       <TextInput
         style={styles.search}
         placeholderTextColor={'gray'}
@@ -167,26 +218,31 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderColor: '#F9F5FE',
     backgroundColor: '#F5F7F8',
-    padding: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 10,
     alignItems: 'center',
     marginBottom: 10,
   },
   todoText: {
     fontSize: 12,
+    lineHeight: 18,
+    color: 'black',
   },
   editCheckIcon: {
-    width: 90,
+    width: 85,
     flexDirection: 'row',
-    paddingLeft: 8,
     alignItems: 'center',
   },
   completedText: {
     fontSize: 12,
+    lineHeight: 18,
     textDecorationLine: 'line-through',
-    color: 'gray',
+    color: 'black',
   },
   input: {
     height: 50,
+    color: 'black',
+    lineHeight: 18,
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,

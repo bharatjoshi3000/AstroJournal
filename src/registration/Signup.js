@@ -141,7 +141,9 @@ const Signup = props => {
           <Animated.View
             entering={FadeInDown.delay(800).duration(1000).springify()}
             style={styles.row}>
-            <Text>Already have an account?</Text>
+            <Text style={{color: 'grey', lineHeight: 20}}>
+              Already have an account?
+            </Text>
             <TouchableOpacity onPress={() => navigation.navigate('Login')}>
               <Text style={styles.loginText}> Log In</Text>
             </TouchableOpacity>

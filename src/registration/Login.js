@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import Animated, {FadeInDown, FadeInUp} from 'react-native-reanimated';
 import {useDispatch, useSelector} from 'react-redux';
-import { isUserLoggedIn } from '../../redux/actions/action';
+import {isUserLoggedIn} from '../../redux/actions/action';
 
 export const deviceWidth = Dimensions.get('window').width;
 
@@ -23,10 +23,8 @@ const Login = props => {
   const [password, setPassword] = useState('');
 
   const existUser = useSelector(state => state.user.users);
-  const isLogin = useSelector(state => state.user.isLoggedIn);
-  console.log(isLogin,'isLoggedIn') 
   const [existingUsers, setExistingUsers] = useState(existUser);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
     setExistingUsers(existUser);
     console.log(existUser, 'existingUsers');
@@ -153,7 +151,9 @@ const Login = props => {
           <Animated.View
             entering={FadeInDown.delay(600).duration(1000).springify()}
             style={styles.row}>
-            <Text>Don't have an account?</Text>
+            <Text style={{color: 'grey', lineHeight: 20}}>
+              Don't have an account?
+            </Text>
             <TouchableOpacity onPress={handleSignUp}>
               <Text style={styles.signUpText}> Sign Up</Text>
             </TouchableOpacity>
