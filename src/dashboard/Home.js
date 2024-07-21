@@ -202,6 +202,8 @@ const styles = StyleSheet.create({
   },
   search: {
     height: 45,
+    color: 'black',
+    lineHeight: 18,
     borderColor: '#F5F7F8',
     borderWidth: 1,
     borderRadius: 14,
