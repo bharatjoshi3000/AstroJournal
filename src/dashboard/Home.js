@@ -1,69 +1,33 @@
-/* eslint-disable react-native/no-inline-styles */
-import React, {useRef, useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
-  TextInput,
   Button,
-  FlatList,
-  TouchableOpacity,
   StyleSheet,
-  Keyboard,
-  Image,
   Alert,
+  TouchableOpacity,
+  Animated,
+  ScrollView,
+  Dimensions,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  addTodo,
-  completeTodo,
-  deleteTodo,
-  editTodo,
-  searchTodo,
-} from '../../redux/actions/todoActions';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import HOROSCOPE_DATA from '../data/horoscopes';
+import DayToggle from '../components/DayToggle';
+import Dropdown from '../components/Dropdown';
+import {useDispatch} from 'react-redux';
 import {isUserLoggedIn} from '../../redux/actions/action';
 
-const Home = props => {
-  const {navigation} = props || {};
-  const [newTodo, setNewTodo] = useState('');
-  const [editing, setEditing] = useState(null);
-  const [search, setSearch] = useState('');
+const HomeScreen = ({navigation}) => {
+  const [selectedSign, setSelectedSign] = useState('aries');
+  const [selectedDay, setSelectedDay] = useState('today');
   const dispatch = useDispatch();
-  const inputRef = useRef(null);
-  const {todos, searchQuery} = useSelector(state => state.todo);
 
-  const handleAddTodo = () => {
-    if (newTodo.trim()) {
-      Keyboard.dismiss();
-      dispatch(addTodo(newTodo));
-      setNewTodo('');
-    }
-  };
-
-  const handleEditTodo = (id, text) => {
-    setEditing(id);
-    setNewTodo(text);
-    setTimeout(() => inputRef.current.focus(), 100); // Focus the input after a brief delay
-  };
-
-  const handleSaveEdit = () => {
-    Keyboard.dismiss();
-    dispatch(editTodo(editing, newTodo));
-    setEditing(null);
-    setNewTodo('');
-  };
-
-  const handleSearch = text => {
-    setSearch(text);
-    dispatch(searchTodo(text));
-  };
+  const horoscope = HOROSCOPE_DATA[selectedSign][selectedDay];
 
   const handleSignOutPress = () => {
-    Alert.alert('Logged Out !', `Logged out successfully!`);
+    Alert.alert('Logged Out!', 'You have been logged out.');
     dispatch(isUserLoggedIn(false));
     setTimeout(() => {
-      navigation.navigate('Login'); // Navigate to Home screen
-      // Clear the navigation stack
+      navigation.navigate('Login');
       navigation.reset({
         index: 0,
         routes: [{name: 'Login'}],
@@ -71,204 +35,138 @@ const Home = props => {
     }, 200);
   };
 
-  const filteredTodos = todos.filter(todo =>
-    todo.text.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
-  const renderItem = ({item}) => {
-    return (
-      <View style={styles.todoContainer}>
-        <View style={styles.todoTextView}>
-          <Text
-            style={item.completed ? styles.completedText : styles.todoText}
-            numberOfLines={1}>
-            {item.text}
-          </Text>
-        </View>
-        <View style={styles.editCheckIcon}>
-          {!item.completed && (
-            <>
-              <TouchableOpacity
-                onPress={() => handleEditTodo(item.id, item.text)}
-                activeOpacity={0.7}
-                style={styles.pencilIcon}>
-                <Icon name="pencil" color="blue" size={15} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => dispatch(completeTodo(item.id))}
-                activeOpacity={0.7}>
-                <Icon name="check" color="green" size={15} />
-              </TouchableOpacity>
-            </>
-          )}
-        </View>
-        <TouchableOpacity
-          onPress={() => dispatch(deleteTodo(item.id))}
-          activeOpacity={0.7}>
-          <Icon name="trash" color="red" size={15} />
-        </TouchableOpacity>
-      </View>
-    );
-  };
   return (
     <View style={styles.container}>
-      <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-        <Text
-          style={{
-            color: 'grey',
-            fontSize: 18,
-            lineHeight: 24,
-            fontWeight: 500,
-          }}>
-          Hey! What's in your mind ?
-        </Text>
+      {/* Header */}
+      <View style={styles.headerRow}>
+        <Text style={styles.headerText}>🔮 Astro Journal</Text>
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={handleSignOutPress}
-          style={{
-            borderWidth: 1,
-            borderColor: 'red',
-            backgroundColor: '#ff9999',
-            width: 72,
-            height: 28,
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: 14,
-            marginLeft: 30,
-          }}>
-          <Text style={{lineHeight: 18, color: 'black'}}>Sign Out</Text>
+          style={styles.signOutButton}>
+          <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>
       </View>
-      <View
-        style={{
-          borderBottomWidth: 1,
-          borderBottomColor: '#f9f5fe',
-          marginBottom: 24,
-          marginTop: 20,
-        }}
-      />
-      <TextInput
-        style={styles.search}
-        placeholderTextColor={'gray'}
-        placeholder="Search your todo..."
-        value={search}
-        onChangeText={handleSearch}
-      />
-      {filteredTodos.length === 0 ? (
-        <View style={styles.emptyContainer}>
-          <Image
-            source={{
-              uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmAmW45mEkcuRxmykuBb9muvpoVzXmZ8naQA&s',
-            }}
-            style={styles.emptyImage}
-          />
+
+      {/* Scrollable content */}
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.section}>
+          <Text style={styles.subtitle}>
+            Horoscope for{' '}
+            <Text style={styles.highlight}>{selectedSign.toUpperCase()}</Text>
+          </Text>
         </View>
-      ) : (
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={filteredTodos}
-          keyExtractor={item => item.id}
-          renderItem={renderItem}
-        />
-      )}
-      <TextInput
-        style={styles.input}
-        ref={inputRef}
-        placeholder="Add new todo..."
-        placeholderTextColor={'gray'}
-        value={newTodo}
-        onChangeText={setNewTodo}
-        autoFocus={!!editing}
-      />
-      <TouchableOpacity
-        onPress={editing ? handleSaveEdit : handleAddTodo}
-        activeOpacity={0.7}
-        style={styles.addButton}>
-        <Text style={{color: 'white', fontSize: 20}}>
-          {editing ? 'Save Edit' : 'Add Todo'}
-        </Text>
-      </TouchableOpacity>
+
+        <View style={styles.section}>
+          <DayToggle selected={selectedDay} onSelect={setSelectedDay} />
+        </View>
+
+        <View style={styles.section}>
+          <View style={styles.card}>
+            <Text style={styles.horoscopeText}>{horoscope}</Text>
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <Dropdown selected={selectedSign} onSelect={setSelectedSign} />
+        </View>
+      </ScrollView>
+
+      <View style={styles.bottomButtonWrapper}>
+        <TouchableOpacity
+          style={styles.journalButton}
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate('Journal')}>
+          <Text style={styles.journalButtonText}>✍️ Write Journal</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
+export default HomeScreen;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
+    paddingTop: 16,
   },
-  todoTextView: {
-    width: '70%',
+  scrollContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 100, // space for bottom button
   },
-  search: {
-    height: 45,
-    color: 'black',
-    lineHeight: 18,
-    borderColor: '#F5F7F8',
-    borderWidth: 1,
-    borderRadius: 14,
-    backgroundColor: 'white',
-    marginBottom: 20,
-    paddingHorizontal: 10,
-  },
-  pencilIcon: {
-    marginRight: 28,
-  },
-  todoContainer: {
+  headerRow: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    marginBottom: 12,
+    alignItems: 'center',
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#4B0082',
+  },
+  signOutButton: {
     borderWidth: 1,
-    borderRadius: 14,
-    borderColor: '#F9F5FE',
-    backgroundColor: '#F5F7F8',
-    paddingHorizontal: 8,
-    paddingVertical: 10,
-    alignItems: 'center',
-    marginBottom: 10,
+    borderColor: '#dc3545',
+    backgroundColor: '#ffccd5',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
   },
-  todoText: {
-    fontSize: 12,
-    lineHeight: 18,
-    color: 'black',
+  signOutText: {
+    color: '#dc3545',
+    fontWeight: '600',
   },
-  editCheckIcon: {
-    width: 85,
-    flexDirection: 'row',
-    alignItems: 'center',
+  subtitle: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#444',
   },
-  completedText: {
-    fontSize: 12,
-    lineHeight: 18,
-    textDecorationLine: 'line-through',
-    color: 'black',
+  highlight: {
+    fontWeight: 'bold',
+    color: '#7B68EE',
   },
-  input: {
-    height: 50,
-    color: 'black',
-    lineHeight: 18,
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    borderColor: '#1e90ff',
-    borderRadius: 14,
-    backgroundColor: 'white',
-  },
-  addButton: {
-    alignItems: 'center',
+  card: {
+    backgroundColor: '#f4f4f4',
+    padding: 16,
+    height: 80,
+    borderRadius: 16,
     justifyContent: 'center',
-    height: 50,
-    borderRadius: 14,
-    backgroundColor: 'black',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    shadowOffset: {width: 0, height: 2},
+    elevation: 4,
+    marginTop: 30,
   },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
+  horoscopeText: {
+    fontSize: 16,
+    color: '#333',
+    lineHeight: 22,
+    textAlign: 'center',
+  },
+  section: {
+    marginVertical: 12,
+  },
+  bottomButtonWrapper: {
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+    right: 20,
+  },
+  journalButton: {
+    backgroundColor: '#6A5ACD',
+    paddingVertical: 14,
+    borderRadius: 30,
     alignItems: 'center',
+    elevation: 3,
   },
-  emptyImage: {
-    width: 300,
-    height: 300,
-    resizeMode: 'contain',
+  journalButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
-
-export default Home;

@@ -8,6 +8,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Login from './src/registration/Login';
 import Signup from './src/registration/Signup';
 import Home from './src/dashboard/Home';
+import Journal from './src/screen/Journal';
 // Store
 const {store, persistor} = configureStore();
 
@@ -27,6 +28,7 @@ const RootApp = () => {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Journal" component={Journal} />
       </Stack.Navigator>
     </NavigationContainer>
   );
