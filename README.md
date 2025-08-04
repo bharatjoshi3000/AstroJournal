@@ -1,81 +1,75 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+🪐 Astro Journal App – README
 
-# Getting Started
+******IMPORTANT NOTE : I HAVE USED MY DUMMY TEMPLATE PROJECT AND MODIFIED AND DONE ALL THE WORK IN THAT THATS WHY SOME COMMITS MIGHT SHOW AS AN YEAR AGO. KINDLY IGNORE THAT****
+📱 Overview
+A cross-platform React Native app that lets users:
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+🔮 View daily horoscopes by zodiac sign
 
-## Step 1: Start the Metro Server
+📝 Write, save, and persist daily journal entries
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+🔄 Toggle horoscope between today, yesterday, and tomorrow
 
-To start Metro, run the following command from the _root_ of your React Native project:
+🔐 Secure onboarding with login/signup
 
-```bash
-# using npm
-npm start
+📴 Offline support using Redux Persist + AsyncStorage
 
-# OR using Yarn
-yarn start
-```
+🚀 Features
+Authentication:
 
-## Step 2: Start your Application
+Login & Signup screens (first-time users must sign up)
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+Data persisted using Redux Persist + AsyncStorage
 
-### For Android
+Home Screen:
 
-```bash
-# using npm
-npm run android
+View horoscope for selected zodiac sign
 
-# OR using Yarn
-yarn android
-```
+Toggle between Today / Yesterday / Tomorrow
 
-### For iOS
+Sign Out button on all screens
 
-```bash
-# using npm
-npm run ios
+Journal Screen:
 
-# OR using Yarn
-yarn ios
-```
+Write and save journal entries locally
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+Auto-persisted using AsyncStorage (via Redux)
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+Horoscope API:
 
-## Step 3: Modifying your App
+Sorry I was not able to find some free API and the API mentioned in the doc returned 503 Service Unavailable, so have to figure my own way out by making custom JSON
 
-Now that you have successfully run the app, let's modify it.
+Used custom dummy JSON to simulate horoscope data
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+Navigation: Implemented via React Navigation
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+Animations: Smooth login/signup animations using React Native Reanimated
 
-## Congratulations! :tada:
+State Management: Handled by Redux Toolkit
 
-You've successfully run and modified your React Native App. :partying_face:
+Offline Support: Achieved using AsyncStorage with Redux Persist
 
-### Now what?
+Modular Folder Structure:
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+/components, /screens, /services, /store, /hooks, etc.
 
-# Troubleshooting
+🛠️ Tech Stack
+React Native
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+Redux Toolkit + Redux Persist
 
-# Learn More
+AsyncStorage
 
-To learn more about React Native, take a look at the following resources:
+React Navigation
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
-# AstroJournal
-# AstroJournal
+React Native Reanimated
+
+🧱 Scalable & Extendable
+Clean architecture makes it ready for:
+
+🧠 AI-based horoscope insights
+
+💬 Chat functionality with astrologers
+
+💳 Payment integration for consultations
+
